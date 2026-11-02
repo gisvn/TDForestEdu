@@ -1,0 +1,9 @@
+PySide6
+numpy
+pandas
+matplotlib
+openpyxl
+xlrd
+python-docx
+psycopg2-binary
+pyinstaller
