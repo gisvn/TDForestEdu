@@ -1,0 +1,26 @@
+# Không có máy Mac? Đẩy thư mục này lên GitHub, vào tab Actions -> chạy "Build macOS DMG".
+# GitHub sẽ build trên máy Mac thật và trả về 2 file .dmg (Apple Silicon + Intel) ở mục Artifacts.
+name: Build macOS DMG
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-15, macos-15-intel]   # macos-15 = Apple Silicon (M1/M2/M3...), macos-15-intel = Intel
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build
+        run: |
+          chmod +x build_mac.sh
+          ./build_mac.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TDForestEdu-${{ matrix.os }}
+          path: dist/*.dmg
